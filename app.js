@@ -60,6 +60,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   MTpushInterface.onMsgReceive(function(res) {
     console.log("📩 收到推送消息:", res);
-    alert("收到推送: " + JSON.stringify(res));
+    document.getElementById('status').textContent = '收到推送: ' + res.data.messages[0].content;
   });
 });
