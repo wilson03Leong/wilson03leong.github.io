@@ -1,28 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web Push Demo</title>
+  <title>LuxeSpin | Premium Gaming</title>
 
-  <!-- ✅ PWA 必须：引用 manifest -->
   <link rel="manifest" href="/manifest.json">
-
-  <!-- ✅ iOS Safari 专用 meta -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="WebPush Demo">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LuxeSpin">
   <link rel="apple-touch-icon" href="/icon.png">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #0f172a; /* Deep Navy/Black */
+      color: #f8fafc;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+    }
+    .gold-gradient {
+      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+    }
+    .casino-card {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(251, 191, 36, 0.2);
+      backdrop-filter: blur(10px);
+    }
+  </style>
 </head>
-<body>
-  <h1>EngageLab Web Push Demo</h1>
-  <button id="subscribeBtn">订阅推送</button>
-  <p id="status">状态：未订阅</p>
+<body class="min-h-screen flex flex-col">
 
-  <!-- ✅ 引入EngageLab Web SDK -->
-  <script src="./webSdk.produce.min.3.3.5.js"></script>
+  <nav class="p-4 border-b border-yellow-600/20 flex justify-between items-center bg-slate-900">
+    <div class="text-2xl font-bold tracking-tighter text-yellow-500">
+      LUXE<span class="text-white">SPIN</span>
+    </div>
+    <div class="space-x-4 text-sm font-medium">
+      <a href="#" class="hover:text-yellow-500">SLOTS</a>
+      <a href="#" class="hover:text-yellow-500">LIVE TABLE</a>
+      <a href="#" class="hover:text-yellow-500 text-red-500">PROMOS</a>
+    </div>
+  </nav>
 
-  <!-- 你的业务逻辑 -->
+  <main class="flex-grow flex flex-col items-center justify-center px-4 py-12 text-center">
+    <div class="casino-card p-8 rounded-3xl shadow-2xl max-w-md w-full border-t-4 border-t-yellow-500">
+      <div class="mb-6">
+        <span class="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Limited Offer</span>
+      </div>
+      
+      <h1 class="text-4xl font-black mb-2 italic">JACKPOT READY?</h1>
+      <p class="text-slate-400 mb-8">Enable notifications to receive <span class="text-yellow-500 font-bold">Daily Free Spins</span> and exclusive VIP bonus drops.</p>
+
+      <button id="subscribeBtn" class="gold-gradient w-full py-4 rounded-xl text-slate-900 font-black text-xl shadow-[0_0_20px_rgba(217,119,6,0.4)] hover:scale-105 transition-transform active:scale-95 mb-4">
+        CLAIM 100 FREE SPINS
+      </button>
+
+      <p id="status" class="text-xs uppercase tracking-widest text-slate-500 font-semibold">
+        STATUS: <span class="text-slate-300">DISCONNECTED</span>
+      </p>
+    </div>
+
+    <div class="mt-12 flex gap-6 opacity-30 grayscale italic font-bold">
+      <span>18+</span>
+      <span>SECURE PAY</span>
+      <span>RESPONSIBLE GAMING</span>
+    </div>
+  </main>
+
+  <div class="fixed bottom-0 w-full bg-slate-900 border-t border-slate-800 p-4 flex justify-around text-[10px] uppercase font-bold text-slate-500">
+    <div class="text-yellow-500">Home</div>
+    <div>Wallet</div>
+    <div>Games</div>
+    <div>Profile</div>
+  </div>
+
+  <script src="https://cdn.engagelab.com/websdk/MTPush.5.1.2.min.js"></script>
+
   <script src="app.js"></script>
 </body>
 </html>
