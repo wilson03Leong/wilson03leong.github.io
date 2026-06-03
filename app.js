@@ -31,7 +31,7 @@ const config = {
     const regId = MTpushInterface.getRegistrationID().toLowerCase(); // ✅ 转小写
     console.log("✅ 订阅成功，RegId:", regId);
     console.log("完整数据:", data);
-    document.getElementById('status').textContent = 'RegId: ' + regId; // ✅ 直接显示 RegID，不需要按两次
+    document.getElementById('status').textContent = 'RegId is: ' + regId; // ✅ 直接显示 RegID，不需要按两次
     // ✅ 删掉 alert，不需要按 close
   },
 
