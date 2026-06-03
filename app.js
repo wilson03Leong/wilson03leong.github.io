@@ -19,7 +19,7 @@ const config = {
 
   success: function(data) {
     console.log("✅ SDK初始化成功", data);
-    document.getElementById('status').textContent = '状态：SDK已初始化';
+    // 不显示"SDK已初始化"，等 canGetInfo 直接显示 RegID
   },
 
   fail: function(data) {
@@ -28,11 +28,11 @@ const config = {
   },
 
   canGetInfo: function(data) {
-    console.log("✅ 订阅成功，RegId:", MTpushInterface.getRegistrationID());
+    const regId = MTpushInterface.getRegistrationID().toLowerCase(); // ✅ 转小写
+    console.log("✅ 订阅成功，RegId:", regId);
     console.log("完整数据:", data);
-    document.getElementById('status').textContent =
-      '状态：已订阅 (RegId: ' + MTpushInterface.getRegistrationID() + ')';
-    alert("订阅成功！");
+    document.getElementById('status').textContent = 'RegId: ' + regId; // ✅ 直接显示 RegID，不需要按两次
+    // ✅ 删掉 alert，不需要按 close
   },
 
   webPushcallback: function(code, tip) {
