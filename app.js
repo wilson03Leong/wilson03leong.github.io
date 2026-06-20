@@ -16,6 +16,7 @@ const config = {
   appkey: webAppKey,
   user_str: getUserStr(),
   swUrl: '/sw.produce.min.3.3.5.js',
+  openUrl: window.location.origin + '/promotion',
 
   success: function(data) {
     console.log("✅ SDK初始化成功", data);
