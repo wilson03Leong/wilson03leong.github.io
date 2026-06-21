@@ -15,7 +15,7 @@ function getUserStr() {
 const config = {
   appkey: webAppKey,
   user_str: getUserStr(),
-  swUrl: '/media/sw.produce.min.3.3.5.js',
+  swUrl: '/sw.produce.min.3.3.5.js',
   openUrl: window.location.origin + '/promotion',
 
   success: function(data) {
