@@ -1,4 +1,4 @@
-const webAppKey = "867a5b19d5b3f56f611c21e8";
+const webAppKey = "b7f2f8246bd046f1aff0fa6a"; //this is my personal appkey
 
 // ✅ user_str 必须稳定不变，同一个浏览器每次都要一样
 // 用 localStorage 保存，没有才生成新的
