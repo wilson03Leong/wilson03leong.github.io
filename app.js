@@ -63,4 +63,9 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("📩 收到推送消息:", res);
     document.getElementById('status').textContent = '收到推送: ' + res.data.messages[0].content;
   });
+
+  MTpushInterface.onMsgClick((msgData) => {
+    console.log('点击消息回调:', msgData);
+    console.log('msg_id:', msgData.msg_id);
+  });
 });
