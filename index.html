@@ -12,7 +12,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="WebPush Demo">
-  <link class="apple-touch-icon" href="/icon.png">
+  <link rel="apple-touch-icon" href="/icon.png">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -29,14 +29,27 @@
       box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
       border: 1px solid rgba(168, 85, 247, 0.3);
     }
-    .neon-btn {
-      background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+    /* 初始化日志面板 */
+    #logBox {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      max-height: 220px;
+      overflow-y: auto;
     }
-    .neon-btn:hover {
-      box-shadow: 0 0 30px rgba(168, 85, 247, 0.8);
-      transform: translateY(-1px);
+    .log-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: left;
+      animation: fadeIn .2s ease;
     }
+    .log-time { color: #64748b; flex-shrink: 0; }
+    .log-dot { flex-shrink: 0; width: 7px; height: 7px; border-radius: 50%; margin-top: 6px; }
+    .log-text { word-break: break-all; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
@@ -54,9 +67,9 @@
 
   <main class="flex-grow flex items-center justify-center p-4">
     <div class="bg-slate-900/90 neon-border p-8 rounded-2xl max-w-sm w-full text-center relative overflow-hidden">
-      
+
       <div class="absolute -top-10 -left-10 w-32 h-32 bg-purple-600/10 rounded-full blur-2xl"></div>
-      
+
       <div class="mb-4">
         <span class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
           Server Event
@@ -70,14 +83,13 @@
         Enable system alerts to claim your <span class="text-purple-400 font-semibold">Premium Play Tokens</span> and get instant notifications when rare daily drop rooms open.
       </p>
 
-      <button id="subscribeBtn" class="neon-btn w-full text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-200 uppercase tracking-wider text-sm">
-        订阅推送
-      </button>
-
-      <div class="mt-6 pt-4 border-t border-slate-800/60">
-        <p id="status" class="text-[11px] tracking-widest text-slate-500 font-bold">
-          状态：未订阅
+      <!-- 订阅按钮已移除：页面打开即初始化 SDK，由 WebPush 控制台配置的引导框申请通知权限（与真实客户站点一致） -->
+      <div class="text-left">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
+          初始化日志
         </p>
+        <div id="logBox" class="bg-slate-950/60 border border-slate-800 rounded-xl p-3"></div>
       </div>
 
     </div>
@@ -93,9 +105,9 @@
   <script src="app.js"></script>
 
 
-  
+
   <!--this is agent -->
-  <!-- <script src="https://www.gptbots.ai/widget/wehwsuugh96rpawdvjaz3gs/chat.js"></script> --> 
+  <!-- <script src="https://www.gptbots.ai/widget/wehwsuugh96rpawdvjaz3gs/chat.js"></script> -->
 
   <!--this is flow agent -->
   <!-- <script src="https://www.gptbots.ai/widget/wehkyfrk3yva8q7kdwti1j1/chat.js"></script> -->
@@ -119,6 +131,6 @@
 </script>
 
 
-  
+
 </body>
 </html>
