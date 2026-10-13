@@ -47,6 +47,22 @@ const config = {
   swUrl: '/sw.produce.min.3.3.5.js',
   //openUrl: window.location.origin + '/promotion',
 
+  // ✅ 开启 MA：SDK 会把这个浏览器的推送设备和 MA 用户绑在一起
+  // 前提：MA 控制台已添加 Web 数据源，并选择「同时使用 WebPush」+ 本应用
+  maOpen: true,
+  userIdentity: { user_id: getUserStr() }, // 玩家 ID 作为 MA 的 user_id，之后 bot 也用同一个
+  maCompletion: function(code, msg) {
+    if (code === 0) {
+      logStage('MA SDK 初始化成功', 'ok');
+      window.MAInterface.EUID(function(c, euid) {
+        if (c === 0 && euid) logStage('MA 用户 EUID：' + euid, 'info');
+        else logStage('获取 EUID 失败（' + c + '）', 'fail');
+      });
+    } else {
+      logStage('MA SDK 初始化失败：' + msg, 'fail');
+    }
+  },
+
   success: function(data) {
     console.log("✅ SDK初始化成功", data);
     logStage('SDK 初始化成功', 'ok');
@@ -61,7 +77,6 @@ const config = {
   canGetInfo: function(data) {
     const regId = MTpushInterface.getRegistrationID().toLowerCase(); // ✅ 转小写
     console.log("✅ 订阅成功，RegId:", regId);
-    console.log("完整数据:", data);
     logStage('注册 ID 生成成功', 'ok');
     logStage('RegID: ' + regId, 'info');
   },
