@@ -58,6 +58,7 @@ const config = {
         if (c === 0 && euid) logStage('MA 用户 EUID：' + euid, 'info');
         else logStage('获取 EUID 失败（' + c + '）', 'fail');
       });
+      reportReturnFromPush();
     } else {
       logStage('MA SDK 初始化失败：' + msg, 'fail');
     }
@@ -90,6 +91,44 @@ const config = {
     else                 logStage('通知不可用（' + (tip || code) + '）', 'fail');
   }
 };
+
+// 页面打开时就记下来源（之后网址参数会被清掉）
+const LAUNCH_FROM = (function() {
+  const from = new URLSearchParams(window.location.search).get('from');
+  return from && from.indexOf('push_') === 0 ? from : null;
+})();
+
+// ✅ 玩家点推送回来：网址带 ?from=push_xxx 时，自动上报「玩家回来了」，MA 旅程据此提前退出并计入转化
+function reportReturnFromPush() {
+  const params = new URLSearchParams(window.location.search);
+  const from = params.get('from');
+  if (!from || from.indexOf('push_') !== 0) return;
+
+  window.MAInterface.onEvent({ name: 'player_returned', properties: { source: 'push_click', push: from } });
+  logStage('从推送回来（' + from + '），已上报 player_returned', 'ok');
+
+  // 去掉网址里的参数，刷新页面时不会重复上报
+  params.delete('from');
+  const rest = params.toString();
+  history.replaceState(null, '', window.location.pathname + (rest ? '?' + rest : '') + window.location.hash);
+}
+
+// ✅ LiveDesk 对话框带上同一个玩家 ID，bot 上报事件时才知道是哪个玩家
+window.addEventListener('livedesk:ready', function() {
+  const playerId = getUserStr();
+  try {
+    window.$livedesk.setUserId(playerId, { name: 'Player ' + playerId.slice(-4) });
+    window.$livedesk.setCustomAttributes({ player_id: playerId });
+    if (LAUNCH_FROM) window.$livedesk.setConversationCustomAttributes({ from_push: LAUNCH_FROM });
+    logStage('对话框已带上玩家 ID' + (LAUNCH_FROM ? '，来源：' + LAUNCH_FROM : ''), 'ok');
+  } catch (e) {
+    logStage('对话框设置玩家 ID 失败：' + e.message, 'fail');
+  }
+});
+window.addEventListener('livedesk:error', function(e) {
+  console.error('LiveDesk 错误:', e.detail);
+  logStage('对话框报错：' + JSON.stringify(e.detail), 'fail');
+});
 
 function initPush() {
   if (!('serviceWorker' in navigator)) { logStage('浏览器不支持 Service Worker', 'fail'); return; }
