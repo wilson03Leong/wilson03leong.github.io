@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIGames 客服</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #0f172a;
+      color: #94a3b8;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    #status { font-size: 13px; padding: 16px; }
+  </style>
+</head>
+<body>
+  <!-- 给 App 用的客服对话页：App 用 WebView 打开 chat.html?player=<玩家ID>&from=<推送名> -->
+  <div id="status">正在打开客服对话…</div>
+
+  <script>
+    // 玩家 ID 和推送来源由 App 通过网址参数传入（这个页面不初始化 WebPush，推送由 App 原生处理）
+    // 注意：demo 直接信任网址里的玩家 ID；正式上线要在 LiveDesk 开启身份验证（identifier_hash）
+    var params = new URLSearchParams(window.location.search);
+    var playerId = params.get('player') || '';
+    var from = params.get('from') || '';
+    if (!/^[A-Za-z0-9_\-]{1,100}$/.test(playerId)) playerId = '';
+    if (from.indexOf('push_') !== 0) from = '';
+
+    function setStatus(text) { document.getElementById('status').textContent = text; }
+
+    window.addEventListener('livedesk:ready', function () {
+      try {
+        if (playerId) {
+          window.$livedesk.setUserId(playerId, { name: 'Player ' + playerId.slice(-4) });
+          // 跟网站版一样写在联系人属性上，bot 通过 ld_channels_sender 读到；不是从推送进来就覆盖成 none
+          window.$livedesk.setCustomAttributes({ player_id: playerId, last_push: from || 'none' });
+        }
+        window.$livedesk.toggle('open');
+        setStatus(playerId ? '' : '没有收到玩家 ID，对话将以访客身份进行');
+      } catch (e) {
+        setStatus('客服对话设置失败：' + e.message);
+      }
+    });
+    window.addEventListener('livedesk:error', function (e) {
+      setStatus('客服对话报错：' + JSON.stringify(e.detail));
+    });
+  </script>
+
+  <!--this is loop agent （winpoint） -->
+  <script>
+    (function(d,t) {
+      var BASE_URL="https://livedesk.engagelab.com";
+      var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+      g.src=BASE_URL+"/console/livedesk/widget/sdk.js";
+      g.defer = true;
+      g.async = true;
+      s.parentNode.insertBefore(g,s);
+      g.onload=function(){
+        window.livedeskSDK.run({
+          websiteToken: 'nqhhxd7an19KADLhDUdtPmQB',
+          baseUrl: BASE_URL
+        })
+      }
+    })(document,"script");
+  </script>
+</body>
+</html>
