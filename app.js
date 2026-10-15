@@ -118,8 +118,14 @@ window.addEventListener('livedesk:ready', function() {
   const playerId = getUserStr();
   try {
     window.$livedesk.setUserId(playerId, { name: 'Player ' + playerId.slice(-4) });
-    window.$livedesk.setCustomAttributes({ player_id: playerId });
-    if (LAUNCH_FROM) window.$livedesk.setConversationCustomAttributes({ from_push: LAUNCH_FROM });
+    // 写在「联系人」属性上：bot 能通过 LiveDesk 变量 ld_channels_sender 读到（会话属性读不到）
+    // last_push 只在这次是从推送点进来时存在，正常打开网站就删掉，bot 看到它就知道这次是被推送带回来的
+    if (LAUNCH_FROM) {
+      window.$livedesk.setCustomAttributes({ player_id: playerId, last_push: LAUNCH_FROM });
+    } else {
+      window.$livedesk.setCustomAttributes({ player_id: playerId });
+      window.$livedesk.deleteCustomAttribute('last_push');
+    }
     logStage('对话框已带上玩家 ID' + (LAUNCH_FROM ? '，来源：' + LAUNCH_FROM : ''), 'ok');
   } catch (e) {
     logStage('对话框设置玩家 ID 失败：' + e.message, 'fail');
